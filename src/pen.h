@@ -57,7 +57,7 @@ public:
 //    void connectTo(int f);
 //    bool friendOf(int x);
 
-    sandPainter sands[numsands];
+    sandPainter sands;
     
 };
 

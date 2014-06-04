@@ -7,7 +7,7 @@ void TestLayer3::setup(){
     y = -10;
     speedX = 0.05;
     speedY = 0.05;
-    img.loadImage("renchizu.jpg");
+    img.loadImage("ohkoku.jpg");
     
 }
 //--------------------------------------------------------------------------------------------------------------
@@ -16,10 +16,10 @@ void TestLayer3::update(){
     x += speedX;
     y += speedY;
     
-    if (x >= 0 || x <= -73) {
+    if (x >= 0 || x <= -844) {
         speedX = speedX*-1;
     }
-    if (y >= 0 || y <= -254) {
+    if (y >= 0 || y <= -208) {
         speedY = speedY*-1;
     }
     
