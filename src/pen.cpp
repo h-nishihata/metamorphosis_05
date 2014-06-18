@@ -3,7 +3,7 @@
 pen::pen(){
     
     pal = (identify+(int)ofRandom(100/5))%100;
-    //    cout << pal << endl;
+    
     float vt = 2;
     float vvt = 0.1;
     float ot = ofRandom(TWO_PI);
@@ -17,33 +17,35 @@ pen::pen(){
         vt += vvt;
         
     }
+    
+    
     /*
-     t = (int)ofRandom(0,360)*PI/180;
-     tv = ofRandom(0.1, 0.2);
-     if(ofRandom(100)<50){tv*=-1;}
-     rad = ofRandom(1, 100);
+     if(ofRandom(100)<50){
+     setDirection = true;
+     }else{
+     setDirection = false;
+     }
      */
+    
+    
     centx = ofGetWidth()/2 + vx*2;
     centy = ofGetHeight()/2 + vy*2;
     
     waitCnt = ofRandom(0, 300);
     step = 0;
     
-    col = 0;
-    flag = false;
-    a = ofRandom(0, 255);
+    
+    flag_c = false;
+    a = ofRandom(255) + 100;
     waiting = ofRandom(0,80);
     
-    //    radius = ofRandom(20);
-    //    radiusNoise = ofRandom(10);
-    //    radLimit = ofRandom(10) + 40;
-    //    val = ofRandom(100);
-    
 }
+
 //--------------------------------------------------------------
 void pen::setup(){
     
 }
+
 //--------------------------------------------------------------
 void pen::setR(int red){
     r = red;
@@ -66,6 +68,8 @@ void pen::setID(int ID){
 
 //--------------------------------------------------------------
 void pen::update(){
+    
+    //  *****   colors    *****
     //    t+=tv;
     //    if (flag_r == false) {
     //
@@ -85,29 +89,34 @@ void pen::update(){
     
     
     
-    //    if (flag == false) {
-    //        r+=0.1;
-    //        g+=0.1;
-    //        b+=0.1;
-    //        if(r>=255 || g>=255 || b>=25){
-    //            flag = true;
-    //        }
-    //    }else if (flag == true){
-    //        r-=0.1;
-    //        g-=0.1;
-    //        b-=0.1;
-    //        if(r<=0 || g<=0 || b<=0){
-    //            flag = false;
-    //        }
-    //    }
-    //
-    //    if(waiting < 80){
-    //        waiting++;
-    //    }else{
-    //        if(a > 0){ a -=3; }else{ a = 255;}
-    //    }
+    if (flag_c == false) {
+        r+=0.1;
+        g+=0.1;
+        b+=0.1;
+        if(r>=255 || g>=255 || b>=25){
+            flag_c = true;
+        }
+    }else if (flag_c == true){
+        r-=0.1;
+        g-=0.1;
+        b-=0.1;
+        if(r<=0 || g<=0 || b<=0){
+            flag_c = false;
+        }
+    }
     
-    //  **********
+    
+    if(waiting < 80){
+        waiting++;
+    }else{
+        if(a > 100){ a -=0.1; }else{ a = 255;}
+    }
+    
+    
+    //  *****   velocity    *****
+    
+    
+    time++;
     
     centx += vx;
     centy += vy;
@@ -126,9 +135,9 @@ void pen::update(){
         float t = atan2(ddy,ddx);
         if (d>lencon) {
             ax += 10.0 * cos(t);
-            ay += 10.0 * sin(t); // 10.0
+            ay += 10.0 * sin(t);
         }else if (d<lencon) {
-            ax += (lencon-d)/10 * cos(t+PI); //(lencon-d)/10 *
+            ax += (lencon-d)/10 * cos(t+PI);
             ay += (lencon-d)/10 * sin(t+PI);
         }
     }
@@ -137,26 +146,24 @@ void pen::update(){
     vy *= 0.98;
     
     
-    if (flag_f == false) {
+    if (flag_d == false) {
         vx += ax/500;
         vy += ay/500;
-        //        centx += vx;
-        //        centy += vy;
-        if(time > 100){
-            flag_f = true;
+        if(time > ofRandom(100)){
+            flag_d = true;
         }
         
-    }else if (flag_f == true){
+    }else if (flag_d == true){
         vx -= ax/500;
         vy -= ay/500;
-        //        centx -= vx;
-        //        centy -= vy;
-        if(time > 200){
-            flag_f = false;
+        if(time > ofRandom(500)){
+            flag_d = false;
             time = 0;
         }
         
     }
+    
+    
     
     if (centx >= 1440 || centx <= 0) {
         centx = ofGetWidth()/2;
@@ -166,28 +173,6 @@ void pen::update(){
         centx = ofGetWidth()/2;
         centy = ofGetHeight()/2;
     }
-    
-    
-    time++;
-    
-    
-    
-    //    if (flag_t == false) {
-    //        vx += ax/100;
-    //        vy += ay/100;
-    //        if(time > 50){
-    //            flag_t = true;
-    //        }
-    //
-    //    }else if (flag_t == true){
-    //        vx -= ax/100;
-    //        vy -= ay/100;
-    //        if(time > 100){
-    //            flag_t = false;
-    //            time = 0;
-    //        }
-    //
-    //    }
     
     
     
@@ -204,21 +189,20 @@ void pen::draw(){
     ofEnableSmoothing();
     ofEnableAlphaBlending();
     
-    //    if (step < waitCnt) {
-    //        step++;
-    //    }
-    //    else {
     
     //    x = centx + rad*cos(t);
     //    y = centy + rad*sin(t);
+    
+    
     ofSetColor(r, g, b, a);
+    
     ofCircle(centx, centy, 1);
+    
     for (int n=0; n<=1; n++) {
-//        for (int i=0; i < numsands; i++) {
-            sands.render(centx, centy, this[n].centx, this[n].centy);
-//        }
+        //        for (int i=0; i < numsands; i++) {
+        sands.render(centx, centy, this[n].centx, this[n].centy);
+        //        }
     }
-    //    }
     
 }
 

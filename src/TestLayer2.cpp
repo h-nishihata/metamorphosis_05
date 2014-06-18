@@ -3,15 +3,15 @@
 //--------------------------------------------------------------------------------------------------------------
 void TestLayer2::setup(){
     
-    fbo.allocate(2284, 1108);
-    processFbo.allocate(2284, 1108);
+    fbo.allocate(1440, 900);
+    processFbo.allocate(1440, 900);
     
-    image.loadImage("ohkoku.jpg");
+    image.loadImage("tohaku.jpg");
     pixels = image.getPixels();
     
     for (int i=0; i<NUM; i++) {
         
-        pos = pens[i].centy * 2284 + pens[i].centx;
+        pos = pens[i].centy * 2239 + pens[i].centx;
         red = pixels[pos *3];
         green = pixels[pos *3 +1];
         blue =  pixels[pos *3 +2];
@@ -147,7 +147,6 @@ void TestLayer2::draw(){
 //    ofRect(0,0,ofGetWidth(),ofGetHeight());
     processFbo.end();
     
-//    cout << pens[0].vx << "\n";
     
     ofSetHexColor(0xffffff);
     fbo.draw(0,0);
