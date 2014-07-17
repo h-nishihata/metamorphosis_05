@@ -106,11 +106,11 @@ void pen::update(){
     }
     
     
-    if(waiting < 80){
-        waiting++;
-    }else{
-        if(a > 100){ a -=0.1; }else{ a = 255;}
-    }
+//    if(waiting < 80){
+//        waiting++;
+//    }else{
+//        if(a > 100){ a -=0.1; }else{ a = 255;}
+//    }
     
     
     //  *****   velocity    *****
@@ -165,11 +165,11 @@ void pen::update(){
     
     
     
-    if (centx >= 1440 || centx <= 0) {
+    if (centx >= 1920 || centx <= 0) {
         centx = ofGetWidth()/2;
         centy = ofGetHeight()/2;
     }
-    if (centy >= 900 || centy <= 0) {
+    if (centy >= 1200 || centy <= 0) {
         centx = ofGetWidth()/2;
         centy = ofGetHeight()/2;
     }

@@ -31,6 +31,6 @@ void TestLayer3::draw(){
     ofBackground(255,255,255,0);
     
     ofSetColor(200, 200, 100);
-    img.draw(x, y, 3787, 900);
+    img.draw(x, y, img.width * 1.45, 1200);
     
 }
