@@ -2,24 +2,25 @@
 
 pen::pen(){
     
-    pal = (identify+(int)ofRandom(100/5))%100;
-    
-    float vt = 2;
-    float vvt = 0.1;
-    float ot = ofRandom(TWO_PI);
-    
-    for (identify=0; identify<100; identify++) {
-        
-        tinc = ot + (1.1-identify/100) * 2 * identify * TWO_PI/100;
-        vx = vt*sin(tinc);
-        vy = vt*cos(tinc);
-        vvt -= 0.00033;
-        vt += vvt;
-        
-    }
-    
-    
     /*
+     pal = (identify+(int)ofRandom(100/5))%100;
+     
+     float vt = 2;
+     float vvt = 0.1;
+     float ot = ofRandom(TWO_PI);
+     
+     for (identify=0; identify<100; identify++) {
+     
+     tinc = ot + (1.1-identify/100) * 2 * identify * TWO_PI/100;
+     vx = vt*sin(tinc);
+     vy = vt*cos(tinc);
+     vvt -= 0.00033;
+     vt += vvt;
+     
+     }
+     
+     
+     
      if(ofRandom(100)<50){
      setDirection = true;
      }else{
@@ -28,12 +29,19 @@ pen::pen(){
      */
     
     
-    centx = ofGetWidth()/2 + vx*2;
-    centy = ofGetHeight()/2 + vy*2;
+    //    centx = ofGetWidth()/2 + vx*2;
+    //    centy = ofGetHeight()/2 + vy*2;
+    centx = ofRandom(ofGetWidth());
+    centy = ofRandom(ofGetHeight());
+    
+    if(ofRandom(100) > 90){
+        setEraser = true;
+    }else{
+        setEraser = false;
+    }
     
     waitCnt = ofRandom(0, 300);
     step = 0;
-    
     
     flag_c = false;
     a = ofRandom(255) + 100;
@@ -63,13 +71,15 @@ void pen::setB(int blue){
 
 //--------------------------------------------------------------
 void pen::setID(int ID){
+    
     identify = ID;
+    //    pal = (identify+(int)ofRandom(100/5))%100;
+    
 }
 
 //--------------------------------------------------------------
 void pen::update(){
     
-    //  *****   colors    *****
     //    t+=tv;
     //    if (flag_r == false) {
     //
@@ -88,29 +98,28 @@ void pen::update(){
     //    }
     
     
-    
     if (flag_c == false) {
         r+=0.1;
         g+=0.1;
         b+=0.1;
-        if(r>=255 || g>=255 || b>=25){
+        if(r>=255 || g>=255 || b>=255){
             flag_c = true;
         }
     }else if (flag_c == true){
         r-=0.1;
         g-=0.1;
         b-=0.1;
-        if(r<=0 || g<=0 || b<=0){
+        if(r<=50 || g<=50 || b<=50){
             flag_c = false;
         }
     }
     
     
-//    if(waiting < 80){
-//        waiting++;
-//    }else{
-//        if(a > 100){ a -=0.1; }else{ a = 255;}
-//    }
+    if(waiting < 80){
+        waiting++;
+    }else{
+        if(a > 100){ a --; }else{ a = 255;}
+    }
     
     
     //  *****   velocity    *****
@@ -121,8 +130,8 @@ void pen::update(){
     centx += vx;
     centy += vy;
     
-    //    vx += (this[pal].centx - centx)/300;
-    //    vy += (this[pal].centy - centy)/300;
+    //    vx += (this[pal].centx - centx);
+    //    vy += (this[pal].centy - centy);
     
     float ax = 0.0;
     float ay = 0.0;
@@ -147,15 +156,15 @@ void pen::update(){
     
     
     if (flag_d == false) {
-        vx += ax/500;
-        vy += ay/500;
+        vx += ax/200;
+        vy += ay/200;
         if(time > ofRandom(100)){
             flag_d = true;
         }
         
     }else if (flag_d == true){
-        vx -= ax/500;
-        vy -= ay/500;
+        vx -= ax/200;
+        vy -= ay/200;
         if(time > ofRandom(500)){
             flag_d = false;
             time = 0;
@@ -166,12 +175,12 @@ void pen::update(){
     
     
     if (centx >= 1920 || centx <= 0) {
-        centx = ofGetWidth()/2;
-        centy = ofGetHeight()/2;
+        centx = ofRandom(ofGetWidth());
+        centy = ofRandom(ofGetHeight());
     }
     if (centy >= 1200 || centy <= 0) {
-        centx = ofGetWidth()/2;
-        centy = ofGetHeight()/2;
+        centx = ofRandom(ofGetWidth());
+        centy = ofRandom(ofGetHeight());
     }
     
     
@@ -188,13 +197,15 @@ void pen::draw(){
     
     ofEnableSmoothing();
     ofEnableAlphaBlending();
-    
-    
+        
     //    x = centx + rad*cos(t);
     //    y = centy + rad*sin(t);
     
-    
-    ofSetColor(r, g, b, a);
+    if (setEraser) {
+        ofSetColor(211, 204, 97, 30);
+    }else{
+        ofSetColor(r,g,b,a);
+    }
     
     ofCircle(centx, centy, 1);
     

@@ -25,13 +25,16 @@ public:
     bool flag_d;
     //    bool setDirection;
     
+    
     //  colors
+    bool setEraser;
     int r;
     int g;
     int b;
     bool flag_c;
     int a;
     int waiting;
+    
     
     //  functions
     pen();
@@ -50,6 +53,7 @@ public:
      void connectTo(int f);
      bool friendOf(int x);
      */
+    
     sandPainter sands;
     
 };
